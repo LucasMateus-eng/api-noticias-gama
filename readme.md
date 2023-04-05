@@ -1,0 +1,3 @@
+# REGRAS DE NEGÓCIOS
+
+# CRUD
