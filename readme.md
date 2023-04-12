@@ -1,11 +1,5 @@
-# REGRAS DE NEGÓCIOS
+# API de notícias - Gama Academy - XP 49
 
-# CRUD
+API desenvolvida com a turma XP 49 da Gama Academy.
 
-# API - A FORMA COMO NOSSA APLICAÇÃO VAI DEFINIR A COMUNICAÇÃO COM OUTROS SISTEMAS
-
-# ROTAS + CONTROLLERS
-
-# API EXPLÍCITAMENTE - ROTAS E CONTROLLERS QUE SUA APLICAÇÃO VAI POSSUIR
-
-# API IMPLÍCITAS - ROTAS E CONTROLLERS AINDA VÃO EXISTIR, MAS ELES SERÃO GENERALIZADOS
+O domínio da API é um blog de notícias. Foram implementadas funcionalidades CRUD para notícias e autores.
