@@ -1,11 +1,5 @@
-import express from "express";
-import routes from "./routes.js";
-import db from "./db/db.js";
-
-const app = express();
-
-app.use(express.json());
-app.use(routes);
+import app from "./app.js";
+import db from "./configs/database.js";
 
 try {
 	await db.sync({ alter: true });

@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import Author from "../authors/authorsModel.js";
-import db from "../../db/db.js";
+import db from "../../configs/database.js";
 
 const News = db.define(
 	"news",
@@ -24,7 +24,7 @@ const News = db.define(
 			allowNull: false,
 		},
 		author_id: {
-			type: Sequelize.INTEGER,
+			type: Sequelize.INTEGER.UNSIGNED,
 			references: {
 				model: Author,
 				key: "id",

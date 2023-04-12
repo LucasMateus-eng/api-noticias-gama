@@ -1,8 +1,14 @@
-import { Author as AuthorRepository } from "../../models";
+import { Author as AuthorRepository } from "../../models/index.js";
+import bcrypt from "bcryptjs";
 
-async function findAll(request, response) {
+async function findAllAuthors(request, response) {
 	try {
-		const authors = await AuthorRepository.findAll();
+		const authors = await AuthorRepository.findAll({
+			include: "news",
+			attributes: {
+				exclude: ["password"],
+			},
+		});
 		response
 			.status(200)
 			.json({ message: "Operação bem-sucedida", data: authors });
@@ -13,9 +19,15 @@ async function findAll(request, response) {
 }
 
 async function findAuthor(request, response) {
+	const authorID = request.params.id;
+
 	try {
-		const authorID = request.params.id;
-		const author = await AuthorRepository.findByPk(authorID);
+		const author = await AuthorRepository.findByPk(authorID, {
+			include: "news",
+			attributes: {
+				exclude: ["password"],
+			},
+		});
 		response
 			.status(200)
 			.json({ message: "Operação bem-sucedida", data: author });
@@ -30,11 +42,21 @@ async function findAuthor(request, response) {
 
 async function addAuthor(request, response) {
 	try {
-		const authorCreated = await AuthorRepository.create({
-			name: request.body.name,
-			bio: request.body.bio,
-			independent: request.body.independent,
-		});
+		const authorCreated = await AuthorRepository.create(
+			{
+				name: request.body.name,
+				bio: request.body.bio,
+				independent: request.body.independent,
+				email: request.body.email,
+				password: bcrypt.hashSync(request.body.password, 8),
+			},
+			{
+				include: "news",
+				attributes: {
+					exclude: ["password"],
+				},
+			}
+		);
 
 		response
 			.status(200)
@@ -46,9 +68,9 @@ async function addAuthor(request, response) {
 }
 
 async function updateAuthor(request, response) {
-	try {
-		const authorID = request.params.id;
+	const authorID = request.params.id;
 
+	try {
 		await AuthorRepository.update(
 			{
 				name: request.body.name,
@@ -62,7 +84,12 @@ async function updateAuthor(request, response) {
 			}
 		);
 
-		const updatedAuthor = await AuthorRepository.findByPk(authorID);
+		const updatedAuthor = await AuthorRepository.findByPk(authorID, {
+			include: "news",
+			attributes: {
+				exclude: ["password"],
+			},
+		});
 		response
 			.status(200)
 			.json({ message: "Operação bem-sucedida", data: updatedAuthor });
@@ -73,16 +100,21 @@ async function updateAuthor(request, response) {
 }
 
 async function deleteAuthor(request, response) {
-	try {
-		const authorID = request.params.id;
+	const authorID = request.params.id;
 
+	try {
 		await AuthorRepository.destroy({
 			where: {
 				id: authorID,
 			},
 		});
 
-		const authors = await AuthorRepository.findAll();
+		const authors = await AuthorRepository.findAll({
+			include: "news",
+			attributes: {
+				exclude: ["password"],
+			},
+		});
 		response
 			.status(200)
 			.json({ message: "Operação bem-sucedida", data: authors });
@@ -92,4 +124,10 @@ async function deleteAuthor(request, response) {
 	}
 }
 
-export default { findAll, addAuthor, findAuthor, updateAuthor, deleteAuthor };
+export default {
+	findAllAuthors,
+	addAuthor,
+	findAuthor,
+	updateAuthor,
+	deleteAuthor,
+};
